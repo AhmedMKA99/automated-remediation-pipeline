@@ -32,6 +32,7 @@ jobs:
       # 4. SCAN CONTAINER IMAGE (Checks OS-level bugs)
       - name: Trivy Container Scan
         uses: aquasecurity/trivy-action@master
+        continue-on-error: true
         continue-on-error: true # Essential for 2026 audit workflows
         with:
           image-ref: 'my-secure-app'
