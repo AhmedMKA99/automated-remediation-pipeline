@@ -3,195 +3,16 @@
   "version": "19.1.1",
   "private": true,
   "description": "Probably the most modern and sophisticated insecure web application",
-  "keywords": [
-    "web security",
-    "web application security",
-    "webappsec",
-    "owasp",
-    "pentest",
-    "pentesting",
-    "security",
-    "vulnerable",
-    "vulnerability",
-    "broken",
-    "bodgeit",
-    "ctf",
-    "capture the flag",
-    "awareness"
-  ],
-  "homepage": "https://owasp-juice.shop",
-  "bugs": {
-    "url": "https://github.com/juice-shop/juice-shop/issues"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/juice-shop/juice-shop.git"
   },
   "license": "MIT",
-  "author": "Björn Kimminich <bjoern.kimminich@owasp.org> (https://kimminich.de)",
-  "contributors": [
-    "Björn Kimminich",
-    "Jannik Hollenbach",
-    "Aashish683",
-    "greenkeeper[bot]",
-    "MarcRler",
-    "agrawalarpit14",
-    "Scar26",
-    "ShubhamPalriwala",
-    "CaptainFreak",
-    "JuiceShopBot",
-    "Supratik Das",
-    "the-pro",
-    "Ziyang Li",
-    "Timo Pagel",
-    "aaryan10",
-    "..."
-  ],
   "scripts": {
-    "build:frontend": "cd frontend && npm run build",
-    "build:server": "tsc",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
-    "frisby": "nyc --report-dir=./build/reports/coverage/api-tests jest --silent --runInBand --forceExit",
-    "postinstall": "cd frontend && npm install && cd .. && npm run build:frontend && (npm run --silent build:server || cd .)",
-    "lint": "eslint *.ts data lib models routes test/**/*.ts views && cd frontend && npm run lint && npm run lint:scss && cd ..",
-    "lint:config": "schema validate -s config.schema.yml",
-    "lint:fix": "eslint *.ts data lib models routes test/**/*.ts views rsn --fix && cd frontend && npm run lint:fix && cd ..",
-    "package": "grunt package",
-    "package:ci": "npm prune --production && npm dedupe && cd frontend && npm prune --production && cd .. && npm run --silent sbom && grunt package",
-    "serve": "concurrently --kill-others \"ts-node app.ts\" \"cd frontend && npm run start\"",
-    "serve:dev": "concurrently --kill-others \"ts-node-dev app.ts\" \"cd frontend && npm run start\"",
     "start": "node build/app",
-    "test": "cd frontend && npm run test -- --watch=false --source-map=true && cd .. && npm run test:server",
-    "test:chromium": "cd frontend && npm run test -- --watch=false --source-map=false --browsers=ChromiumHeadless && cd .. && npm run test:server",
-    "test:server": "nyc --report-dir=./build/reports/coverage/server-tests mocha -r ts-node/register -r source-map-support/register --recursive test/server/**/*.ts",
-    "test:api": "npm run frisby",
-    "rsn": "ts-node rsn/rsn.ts",
-    "rsn:verbose": "ts-node rsn/rsn-verbose.ts",
-    "rsn:update": "ts-node rsn/rsn-update.ts",
-    "vagrant": "cd vagrant && vagrant up",
-    "sbom": "npm run sbom:json && npm run sbom:xml",
-    "sbom:json": "cyclonedx-npm --omit=dev --output-format=JSON --output-file=bom.json",
-    "sbom:xml": " cyclonedx-npm --omit=dev --output-format=XML  --output-file=bom.xml"
+    "test": "mocha test/server/**/*.ts",
+    "sbom": "cyclonedx-npm --omit=dev --output-format=JSON --output-file=sbom.json"
   },
-  "jest": {
-    "transform": {
-      "^.+\\.[tj]s$": [
-        "ts-jest",
-        {
-          "diagnostics": false
-        }
-      ]
-    },
-    "globalSetup": "./test/apiTestsSetup.ts",
-    "globalTeardown": "./test/apiTestsTeardown.ts",
-    "modulePathIgnorePatterns": [
-      "/build"
-    ],
-    "setupFilesAfterEnv": [
-      "./test/apiTestsSetupJest.ts"
-    ],
-    "testMatch": [
-      "<rootDir>/test/api/*Spec.[jt]s"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/frontend/node_modules/"
-    ],
-    "testEnvironmentOptions": {
-      "url": "http://localhost"
-    }
-  },
-  "nyc": {
-    "extends": "@istanbuljs/nyc-config-typescript",
-    "all": true,
-    "include": [
-      "lib/*.ts",
-      "models/*.ts",
-      "routes/*.ts",
-      "server.ts"
-    ],
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ]
-  },
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "check-dependencies": "^1.1.1",
-    "check-internet-connected": "^2.0.6",
-    "clarinet": "^0.12.6",
-    "colors": "1.4.0",
-    "compression": "^1.7.4",
-    "config": "^3.3.12",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "dottie": "^2.0.6",
-    "download": "^8.0.0",
-    "errorhandler": "^1.5.1",
-    "ethers": "^6.13.2",
-    "express": "^4.21.0",
-    "express-ipfilter": "^1.3.2",
-    "express-jwt": "0.1.3",
-    "express-rate-limit": "^7.5.0",
-    "express-robots-txt": "^0.4.1",
-    "express-security.txt": "^2.0.0",
-    "feature-policy": "^0.5.0",
-    "file-stream-rotator": "^1.0.0",
-    "file-type": "^16.5.4",
-    "filesniffer": "^1.0.3",
-    "finale-rest": "^1.2.2",
-    "fs-extra": "^9.1.0",
-    "fuzzball": "^1.4.0",
-    "glob": "^10.4.5",
-    "graceful-fs": "^4.2.11",
-    "grunt": "^1.6.1",
-    "grunt-contrib-compress": "^1.6.0",
-    "grunt-replace-json": "^0.1.0",
-    "hashids": "^2.3.0",
-    "hbs": "^4.2.0",
-    "helmet": "^4.6.0",
-    "html-entities": "^1.4.0",
-    "i18n": "^0.11.1",
-    "js-yaml": "^3.14.0",
-    "jsonwebtoken": "0.4.0",
-    "jssha": "^3.3.1",
-    "juicy-chat-bot": "~0.9.0",
-    "libxmljs2": "~0.37.0",
-    "marsdb": "^0.6.11",
-    "median": "^0.0.2",
-    "morgan": "^1.10.0",
-    "multer": "^1.4.5-lts.1",
-    "node-pre-gyp": "^0.15.0",
-    "notevil": "^1.3.3",
-    "on-finished": "^2.3.0",
-    "otplib": "^12.0.1",
-    "pdfkit": "^0.11.0",
-    "portscanner": "^2.2.0",
-    "prom-client": "^14.2.0",
-    "pug": "^3.0.3",
-    "replace": "^1.2.2",
-    "sanitize-filename": "^1.6.3",
-    "sanitize-html": "1.4.2",
-    "semver": "^7.6.3",
-    "sequelize": "^6.37.3",
-    "serve-index": "^1.9.1",
-    "socket.io": "^3.1.2",
-    "sqlite3": "^5.1.7",
-    "svg-captcha": "^1.4.0",
-    "swagger-ui-express": "^5.0.1",
-    "ts-node-dev": "^1.1.8",
-    "unzipper": "0.9.15",
-    "web3": "^4.13.0",
-    "winston": "^3.16.0",
-    "yaml-schema-validator": "^1.2.3",
-    "z85": "^0.0.2"
-  },
-  {
-  "name": "juice-shop",
-  "version": "19.1.1",
-  "private": true,
-  "description": "Probably the most modern and sophisticated insecure web application",
   "dependencies": {
     "body-parser": "^1.20.2",
     "check-dependencies": "^1.1.1",
@@ -222,8 +43,6 @@
     "glob": "^10.4.5",
     "graceful-fs": "^4.2.11",
     "grunt": "^1.6.1",
-    "grunt-contrib-compress": "^1.6.0",
-    "grunt-replace-json": "^0.1.0",
     "hashids": "^2.3.0",
     "hbs": "^4.2.0",
     "helmet": "^4.6.0",
@@ -264,33 +83,8 @@
     "z85": "^0.0.2"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
-    "jest": "^29.7.0",
+    "@cyclonedx/cyclonedx-npm": "^1.19.2",
     "mocha": "^8.4.0",
     "typescript": "~5.3.3"
-  }
-},
-  "engines": {
-    "node": "20 - 24"
-  },
-  "os": [
-    "win32",
-    "linux",
-    "darwin",
-    "freebsd",
-    "openbsd"
-  ],
-  "cpu": [
-    "x64",
-    "x32",
-    "arm64",
-    "arm"
-  ],
-  "heroku-run-build-script": true,
-  "standard": {
-    "global": [
-      "angular",
-      "inject"
-    ]
   }
 }
