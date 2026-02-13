@@ -1,0 +1,54 @@
+name: DevSecOps 2026 Workflow
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. SCAN FOR SECRETS
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        continue-on-error: true 
+
+      # 2. SCAN DEPENDENCIES (SCA)
+      - name: Snyk SCA Scan
+        uses: snyk/actions/node@master
+        continue-on-error: true 
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      # 3. BUILD DOCKER IMAGE
+      - name: Build Local Image
+        run: docker build -t my-secure-app .
+
+      # 4. SCAN CONTAINER IMAGE
+      - name: Trivy Container Scan
+        uses: aquasecurity/trivy-action@master
+        continue-on-error: true 
+        with:
+          image-ref: 'my-secure-app'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+
+      # 5. GENERATE SBOM (Compliance Requirement)
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          format: 'cyclonedx-json'
+          output-file: 'sbom.json'
+
+      # 6. UPLOAD SBOM FOR DOWNLOAD
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: software-bill-of-materials
+          path: sbom.json
+          retention-days: 7
